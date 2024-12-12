@@ -1,6 +1,6 @@
 // Write
 int write_user_to_file(struct User user);
-int write_transaction_to_file(struct Transaction *transaction);
+int write_transaction_to_file(struct Transaction transaction);
 
 // Read
 struct User *read_users_from_file();

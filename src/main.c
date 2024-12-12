@@ -93,7 +93,7 @@ void handle_logout()
 void handle_user_creation()
 {
   struct User u;
-  printf("Enter a username. \t");
+  printf("Enter a username.\t ");
 
   scanf("%[^\n]", u.user_name);
   clear_input_buffer();
@@ -107,7 +107,8 @@ void handle_user_creation()
 
   u.balance = 10000;
   u.user_id = generate_unique_user_id();
-  create_user(u);
+  int status = create_user(u);
+  status ? printf("User created successfully!\n") : printf("Error creating user!\n");
 }
 
 void handle_transaction()
