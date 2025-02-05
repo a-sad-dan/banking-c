@@ -128,14 +128,20 @@ void handle_login()
 {
   char u_name[50];
   char pass[50];
-
+  printf("Enter your username. \t");
   scanf("%s", u_name);
   clear_input_buffer();
+  printf("Enter your password. \t");
   scanf("%s", pass);
   clear_input_buffer();
 
-  login_user(u_name, pass);
-  // Use return codes to handle errors
+  printf("Logging in %s\n", u_name);
+  int flag = login_user(u_name, pass);
+
+  if (flag)
+  {
+    isLoggedIn = true;
+  }
 }
 
 void logout_user()
