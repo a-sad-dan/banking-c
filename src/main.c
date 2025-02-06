@@ -5,6 +5,7 @@
 #include <transaction.h>
 #include <file_ops.h>
 #include <utils.h>
+#include <string.h>
 
 void display_menu();
 void handle_login();
@@ -14,6 +15,7 @@ void handle_transaction();
 void logout_user();
 
 bool isLoggedIn = false;
+char current_user[50] = "";
 
 int main()
 {
@@ -26,11 +28,19 @@ void display_menu()
   int choice;
   do
   {
-    printf("\n===== Banking System Menu =====\n");
-    printf("1. Create User\n");
-    printf("2. Login\n");
-    printf("3. Logout\n");
-    printf("4. Make a Transaction\n");
+    if (!isLoggedIn)
+    {
+      printf("\n===== Banking System Menu =====\n");
+      printf("1. Create User\n");
+      printf("2. Login\n");
+    }
+    if (isLoggedIn)
+    {
+      printf("\n===== Welcome %s =====\n", current_user);
+      printf("3. Logout\n");
+      printf("4. Make a Transaction\n");
+      printf("5. View Balance\n");
+    }
     printf("0. Exit\n");
     printf("================================\n");
     printf("Enter your choice: ");
@@ -70,7 +80,17 @@ void display_menu()
         printf("Error: Please log in to make a transaction.\n");
       }
       break;
-
+    case 5:
+      if (isLoggedIn)
+      {
+        float bal = find_balance_by_username(current_user);
+        printf("Your balance is: %.2f\n", bal);
+      }
+      else
+      {
+        printf("Error: Please log in to view your balance.\n");
+      }
+      break;
     default:
       printf("Invalid choice. Please try again.\n\n\n");
     }
@@ -82,7 +102,6 @@ void handle_logout()
   if (isLoggedIn)
   {
     logout_user();
-    printf("Successfully logged out.\n");
   }
   else
   {
@@ -115,7 +134,7 @@ void handle_transaction()
 {
   struct Transaction t = {0};
   // amount, sender id , rec id, trans id
-
+  
   printf("Enter receiver Id. \t");
   scanf("%d", &t.receiver_id);
   clear_input_buffer();
@@ -140,6 +159,8 @@ void handle_login()
 
   if (flag)
   {
+    // Save current user detail
+    strcpy(current_user, u_name);
     isLoggedIn = true;
   }
 }
@@ -147,4 +168,6 @@ void handle_login()
 void logout_user()
 {
   isLoggedIn = false;
+  printf("%s logged out.\n", current_user);
+  strcpy(current_user, "");
 }
