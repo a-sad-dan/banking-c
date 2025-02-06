@@ -13,6 +13,8 @@ int create_user(struct User new_user);
 int login_user(char *username, char *password);
 void logout_user();
 struct User *find_user_by_id(int user_id);
-struct User *find_user_by_username(char username);
+struct User *find_user_by_username(char *username);
+
+float find_balance_by_username(char *username);
 
 #endif // USER_H
