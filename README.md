@@ -3,10 +3,43 @@
 
 This is a simple banking system implemented in C. The system allows users to create accounts, log in, send money, and view transaction histories. Data is persistently stored in files, ensuring information is retained between program executions.
 
+## User Story
+
+Upon launching the application, the user is greeted with a menu with three options:
+
+1. **Create User**
+2. **Login**
+3. **Exit** (Exit the program)
+
+### Create User
+- This flow is working as intended.
+
+### Login
+- The user enters their username and password.
+- Upon successful login, the user is greeted with a welcome menu with four options:
+
+  4. **Logout**
+  5. **Make a Transaction**
+  6. **View Balance**
+  7. **Exit** (Exit the program)
+
+## Sample Accounts
+Delete the users.dat to remove the accounts.
+All the accounts get started with the default of 10,000 as balance.
+
+| Account Name   | Password    | User ID   |
+| -------------- | ----------- | --------- |
+| danishasad     | danish123   | 543240203 |
+| akramkhan      | akram29     | 545961583 |
+| vaibhav_mishra | pine_2025   | 550216902 |
+| devansh        | struct@algo | 554963052 |
+| anurag-sharma  | tallGuy@123 | 559513305 |
+
+
 ## Features
 - **User Management**:
   - Create a new account.
-  - Secure login with hashed passwords.
+  - Secure login with passwords.
   - Logout functionality.
 - **Banking Transactions**:
   - Transfer money between accounts.
@@ -80,7 +113,7 @@ banking_system/
 ## File Details
 - **`users.dat`**:
   - Stores user records in binary format.
-  - Fields: `user_id`, `username`, `password_hash`, `balance`.
+  - Fields: `user_id`, `username`, `password`, `balance`.
 
 - **`transactions.dat`**:
   - Logs all transactions in binary format.
