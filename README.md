@@ -86,7 +86,7 @@ banking_system/
    ```
 3. Run the program:
    ```bash
-   ./banking_system
+   make run
    ```
 4. Clean build files:
    ```bash
