@@ -31,17 +31,18 @@ void display_menu()
     if (!isLoggedIn)
     {
       printf("\n===== Banking System Menu =====\n");
-      printf("1. Create User\n");
-      printf("2. Login\n");
+      printf("\033[1m1.\033[0m Create User\n");
+      printf("\033[1m2.\033[0m Login\n");
     }
     if (isLoggedIn)
     {
-      printf("\n===== Welcome %s =====\n", current_user);
-      printf("3. Logout\n");
-      printf("4. Make a Transaction\n");
-      printf("5. View Balance\n");
+      printf("\n\033[34m===== Welcome %s =====\033[0m\n", current_user);
+      printf("\033[1m3.\033[0m Logout\n");
+      printf("\033[1m4.\033[0m Make a Transaction\n");
+      printf("\033[1m5.\033[0m View Balance\n");
+      printf("\033[1m6.\033[0m View Transaction History\n");
     }
-    printf("0. Exit\n");
+    printf("\033[31m\033[1m0.\033[0m Exit\033[0m\n");
     printf("================================\n");
     printf("Enter your choice: ");
     scanf("%d", &choice);
@@ -52,7 +53,7 @@ void display_menu()
     switch (choice)
     {
     case 0:
-      printf("Exiting the program.\n");
+      printf("\033[34m\nGoodbye!.\033[0m\n\n");
       break;
     case 1:
       handle_user_creation();
@@ -84,13 +85,24 @@ void display_menu()
       if (isLoggedIn)
       {
         float bal = find_balance_by_username(current_user);
-        printf("Your balance is: %.2f\n", bal);
+        printf("Your balance is: \033[1m%.2f\033[0m\n", bal);
       }
       else
       {
         printf("Error: Please log in to view your balance.\n");
       }
       break;
+    case 6:
+      if (isLoggedIn)
+      {
+        display_transaction_history(find_user_id_by_username(current_user));
+      }
+      else
+      {
+        printf("Error: Please log in to view your transaction history.\n");
+      }
+      break;
+
     default:
       printf("Invalid choice. Please try again.\n\n\n");
     }
@@ -127,20 +139,46 @@ void handle_user_creation()
   u.balance = 10000;
   u.user_id = generate_unique_user_id();
   int status = create_user(u);
-  status ? printf("User created successfully!\n") : printf("Error creating user!\n");
+  if (status)
+  {
+    printf("\n\033[32mUser created successfully!\033[0m\n");
+    printf("\033[34mUser ID: \033[1m%d\033[0m\033[0m\n", u.user_id);
+  }
+  else
+  {
+    printf("Error creating user!\n");
+  }
 }
 
 void handle_transaction()
 {
-  struct Transaction t = {0};
-  // amount, sender id , rec id, trans id
-  
-  printf("Enter receiver Id. \t");
-  scanf("%d", &t.receiver_id);
+  // Take the receiver id
+  int receiver_id;
+  printf("Enter the receiver id.\t");
+  scanf("%d", &receiver_id);
   clear_input_buffer();
-  // validate_receiver_id();
-  // send_money();
-  // record_transaction()
+
+  // Take the amount
+  float amount;
+  printf("Enter the amount.\t");
+  scanf("%f", &amount);
+  clear_input_buffer();
+
+  int status = send_money(find_user_id_by_username(current_user), receiver_id, amount);
+
+  if (status)
+  {
+    printf("\033[32mTransaction successful!\033[0m\n");
+    // record the transaction
+    struct Transaction transaction;
+    transaction.transaction_id = generate_unique_transaction_id();
+    transaction.sender_id = find_user_id_by_username(current_user);
+    transaction.receiver_id = receiver_id;
+    transaction.amount = amount;
+    transaction.date[0] = '\0'; // Initialize date to an empty string
+    strcpy(transaction.date, get_current_date());
+    record_transaction(transaction);
+  }
 }
 
 void handle_login()
@@ -154,7 +192,7 @@ void handle_login()
   scanf("%s", pass);
   clear_input_buffer();
 
-  printf("Logging in %s\n", u_name);
+  printf("\nLogging in %s\n", u_name);
   int flag = login_user(u_name, pass);
 
   if (flag)
